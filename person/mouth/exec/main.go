@@ -27,7 +27,7 @@ func ExampleFileMouth() {
 }
 
 func ExampleHTTPMouth() {
-	m := mouth.NewHTTPMouth("localhost:8080")
+	m := mouth.NewHTTPMouth("localhost:8080", "localhost:8081")
 	for i := 1; i < 10; i++ {
 		m.InputChannel <- dto.StringToMessage(strconv.Itoa(i))
 	}
