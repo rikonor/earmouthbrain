@@ -15,11 +15,10 @@ type HTTPEar struct {
 }
 
 // NewHTTPEar - Create a new HTTPEar
-func NewHTTPEar(msgHandler dto.MessageHandler, port string) *HTTPEar {
+func NewHTTPEar(port string) *HTTPEar {
 	he := HTTPEar{
 		Port: port,
 	}
-	he.MessageHandler = msgHandler
 
 	go he.Listen()
 

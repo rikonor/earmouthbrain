@@ -15,7 +15,8 @@ func NewBrainlessHTTPToConsoleBody(port string) *BrainlessHTTPToConsoleBody {
 	m := mouth.NewConsoleMouth()
 
 	// Get Ear
-	e := ear.NewHTTPEar(m.Say, port)
+	e := ear.NewHTTPEar(port)
+	e.RegisterMessageHandler(m.SayAsync)
 
 	return &BrainlessHTTPToConsoleBody{
 		Ear:   e,
@@ -33,7 +34,8 @@ func NewBrainlessConsoleToConsoleBody() *BrainlessConsoleToConsoleBody {
 	m := mouth.NewConsoleMouth()
 
 	// Get Ear
-	e := ear.NewConsoleEar(m.Say)
+	e := ear.NewConsoleEar()
+	e.RegisterMessageHandler(m.SayAsync)
 
 	return &BrainlessConsoleToConsoleBody{
 		Ear:   e,
@@ -48,7 +50,8 @@ type BrainlessFileToFileBody struct {
 
 func NewBrainlessFileToFileBody(inputFilePath, outputFilePath string) *BrainlessFileToFileBody {
 	m := mouth.NewFileMouth(outputFilePath)
-	e := ear.NewFileEar(m.Say, inputFilePath)
+	e := ear.NewFileEar(inputFilePath)
+	e.RegisterMessageHandler(m.SayAsync)
 
 	return &BrainlessFileToFileBody{
 		Ear:   e,
@@ -63,10 +66,15 @@ type BrainlessHTTPToFileBody struct {
 
 func NewBrainlessHTTPToFileBody(port, outputFilePath string) *BrainlessHTTPToFileBody {
 	m := mouth.NewFileMouth(outputFilePath)
-	e := ear.NewHTTPEar(m.Say, port)
+	e := ear.NewHTTPEar(port)
+	e.RegisterMessageHandler(m.SayAsync)
 
 	return &BrainlessHTTPToFileBody{
 		Ear:   e,
 		Mouth: m,
 	}
 }
+
+// func BrainlessFileToMultipleHTTPBody(port, outputFilePath) {
+//
+// }

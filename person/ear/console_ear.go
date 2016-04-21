@@ -9,12 +9,12 @@ import (
 // ConsoleEar - listens to input from the console
 type ConsoleEar struct {
 	Ear
+	handlers []dto.MessageHandler
 }
 
 // NewConsoleEar - Create a new ConsoleEar
-func NewConsoleEar(msgHandler dto.MessageHandler) *ConsoleEar {
+func NewConsoleEar() *ConsoleEar {
 	ce := ConsoleEar{}
-	ce.MessageHandler = msgHandler
 	return &ce
 }
 

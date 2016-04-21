@@ -12,19 +12,24 @@ func msgHandler(msg dto.Message) {
 }
 
 func ExampleFileEar() {
-	ear.NewFileEar(msgHandler, "./testfile")
+	fe := ear.NewFileEar("./testfile")
+	fe.RegisterMessageHandler(msgHandler)
 
 	var x string
 	fmt.Scanln(&x)
 }
 
 func ExampleConsoleEar() {
-	ce := ear.NewConsoleEar(msgHandler)
+	ce := ear.NewConsoleEar()
+	ce.RegisterMessageHandler(msgHandler)
 	ce.Listen()
+
+	// ce.Listen blocks (because it has to read from stdin)
 }
 
 func ExampleHTTPEar() {
-	ear.NewHTTPEar(msgHandler, "8080")
+	he := ear.NewHTTPEar("8080")
+	he.RegisterMessageHandler(msgHandler)
 
 	var x string
 	fmt.Scanln(&x)

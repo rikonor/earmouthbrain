@@ -15,7 +15,7 @@ type FileEar struct {
 }
 
 // NewFileEar - Create a new FileEar
-func NewFileEar(msgHandler dto.MessageHandler, filePath string) *FileEar {
+func NewFileEar(filePath string) *FileEar {
 	if _, err := os.Stat(filePath); err != nil {
 		if _, err := os.Create(filePath); err != nil {
 			panic(fmt.Sprintf("Failed to create file: %s", filePath))
@@ -25,7 +25,6 @@ func NewFileEar(msgHandler dto.MessageHandler, filePath string) *FileEar {
 	fe := FileEar{
 		FilePath: filePath,
 	}
-	fe.MessageHandler = msgHandler
 
 	go fe.Listen()
 
