@@ -11,19 +11,21 @@ import (
 // FileEar - follows a file and treats lines as messages
 type FileEar struct {
 	Ear
-	FilePath string
+	FilePaths []string
 }
 
 // NewFileEar - Create a new FileEar
-func NewFileEar(filePath string) *FileEar {
-	if _, err := os.Stat(filePath); err != nil {
-		if _, err := os.Create(filePath); err != nil {
-			panic(fmt.Sprintf("Failed to create file: %s", filePath))
+func NewFileEar(filePaths ...string) *FileEar {
+	for _, filePath := range filePaths {
+		if _, err := os.Stat(filePath); err != nil {
+			if _, err := os.Create(filePath); err != nil {
+				panic(fmt.Sprintf("Failed to create file: %s", filePath))
+			}
 		}
 	}
 
 	fe := FileEar{
-		FilePath: filePath,
+		FilePaths: filePaths,
 	}
 
 	go fe.Listen()
@@ -32,14 +34,18 @@ func NewFileEar(filePath string) *FileEar {
 }
 
 func (fe *FileEar) Listen() {
-	t, err := tail.TailFile(fe.FilePath, tail.Config{Follow: true})
-	if err != nil {
-		panic(fmt.Sprintf("Failed to tail file: %s", fe.FilePath))
-	}
+	for _, filePath := range fe.FilePaths {
+		go func(filePath string) {
+			t, err := tail.TailFile(filePath, tail.Config{Follow: true})
+			if err != nil {
+				panic(fmt.Sprintf("Failed to tail file: %s", filePath))
+			}
 
-	for msgText := range t.Lines {
-		msg := dto.StringToMessage(msgText.Text)
+			for msgText := range t.Lines {
+				msg := dto.StringToMessage(msgText.Text)
 
-		fe.relayMessage(msg)
+				fe.relayMessage(msg)
+			}
+		}(filePath)
 	}
 }

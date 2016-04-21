@@ -12,7 +12,7 @@ func msgHandler(msg dto.Message) {
 }
 
 func ExampleFileEar() {
-	fe := ear.NewFileEar("./testfile")
+	fe := ear.NewFileEar("./testfile1", "./testfile2")
 	fe.RegisterMessageHandler(msgHandler)
 
 	var x string
@@ -36,5 +36,5 @@ func ExampleHTTPEar() {
 }
 
 func main() {
-	ExampleHTTPEar()
+	ExampleFileEar()
 }
