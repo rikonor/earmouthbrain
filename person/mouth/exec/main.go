@@ -1,18 +1,32 @@
 package main
 
-import "github.com/rikonor/people/person/mouth"
+import (
+	"strconv"
+	"time"
+
+	"github.com/rikonor/people/person/dto"
+	"github.com/rikonor/people/person/mouth"
+)
 
 func ExampleConsoleMouth() {
 	m := mouth.NewConsoleMouth()
-	m.Say("Hello")
+	for i := 1; i < 10; i++ {
+		m.InputChannel <- dto.StringToMessage(strconv.Itoa(i))
+	}
+
+	time.Sleep(1 * time.Second)
 }
 
 func ExampleFileMouth() {
 	m := mouth.NewFileMouth("./testfile")
-	m.Say("Hello")
+	for i := 1; i < 10; i++ {
+		m.InputChannel <- dto.StringToMessage(strconv.Itoa(i))
+	}
+
+	time.Sleep(1 * time.Second)
 }
 
 func main() {
-	// ExampleConsoleMouth()
-	ExampleFileMouth()
+	ExampleConsoleMouth()
+	// ExampleFileMouth()
 }

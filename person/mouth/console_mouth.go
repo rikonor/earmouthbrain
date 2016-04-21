@@ -7,12 +7,16 @@ import (
 )
 
 type ConsoleMouth struct {
+	Mouth
 }
 
 func NewConsoleMouth() *ConsoleMouth {
-	return &ConsoleMouth{}
+	m := ConsoleMouth{}
+	m.InputChannel = make(chan dto.Message, DefaultInputBufferCapacity)
+	go m.waitForSomethingToSay(m.SaySync)
+	return &m
 }
 
-func (m *ConsoleMouth) Say(msg dto.Message) {
+func (m *ConsoleMouth) SaySync(msg dto.Message) {
 	fmt.Println("I have this to say:", msg)
 }

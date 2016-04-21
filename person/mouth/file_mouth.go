@@ -8,6 +8,7 @@ import (
 )
 
 type FileMouth struct {
+	Mouth
 	FilePath string
 	file     *os.File
 }
@@ -20,13 +21,18 @@ func NewFileMouth(filePath string) *FileMouth {
 
 	// Notice file is never closed
 
-	return &FileMouth{
+	m := FileMouth{
 		FilePath: filePath,
 		file:     f,
 	}
+	m.InputChannel = make(chan dto.Message, DefaultInputBufferCapacity)
+
+	go m.waitForSomethingToSay(m.SaySync)
+
+	return &m
 }
 
-func (m *FileMouth) Say(msg dto.Message) {
+func (m *FileMouth) SaySync(msg dto.Message) {
 	msgText := string(msg) + "\n"
 	m.file.WriteString(msgText)
 }
