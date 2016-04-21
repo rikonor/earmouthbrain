@@ -10,8 +10,8 @@ import (
 
 // FileEar - follows a file and treats lines as messages
 type FileEar struct {
-	MessageHandler dto.MessageHandler
-	FilePath       string
+	Ear
+	FilePath string
 }
 
 // NewFileEar - Create a new FileEar
@@ -23,21 +23,13 @@ func NewFileEar(msgHandler dto.MessageHandler, filePath string) *FileEar {
 	}
 
 	fe := FileEar{
-		MessageHandler: msgHandler,
-		FilePath:       filePath,
+		FilePath: filePath,
 	}
+	fe.MessageHandler = msgHandler
 
 	go fe.Listen()
 
 	return &fe
-}
-
-func (fe *FileEar) relayMessage(msg dto.Message) {
-	if fe.MessageHandler == nil {
-		fmt.Println("Ear can't relay message sinfe no message handler was defined")
-		return
-	}
-	fe.MessageHandler(msg)
 }
 
 func (fe *FileEar) Listen() {

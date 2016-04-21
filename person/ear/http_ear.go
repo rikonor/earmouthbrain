@@ -10,28 +10,20 @@ import (
 
 // HTTPEar - serves as Handler interface between the person and the HTTPWorld
 type HTTPEar struct {
-	MessageHandler dto.MessageHandler
-	Port           string
+	Ear
+	Port string
 }
 
 // NewHTTPEar - Create a new HTTPEar
 func NewHTTPEar(msgHandler dto.MessageHandler, port string) *HTTPEar {
 	he := HTTPEar{
-		MessageHandler: msgHandler,
-		Port:           port,
+		Port: port,
 	}
+	he.MessageHandler = msgHandler
 
-	go he.listen()
+	go he.Listen()
 
 	return &he
-}
-
-func (he *HTTPEar) relayMessage(msg dto.Message) {
-	if he.MessageHandler == nil {
-		fmt.Println("Ear can't relay message since no message handler was defined")
-		return
-	}
-	he.MessageHandler(msg)
 }
 
 func getHTTPHandler(msgHandler dto.MessageHandler) func(http.ResponseWriter, *http.Request) {
@@ -47,7 +39,7 @@ func getHTTPHandler(msgHandler dto.MessageHandler) func(http.ResponseWriter, *ht
 	}
 }
 
-func (he *HTTPEar) listen() {
+func (he *HTTPEar) Listen() {
 	http.HandleFunc("/", getHTTPHandler(he.relayMessage))
 	http.ListenAndServe(":"+he.Port, nil)
 }
