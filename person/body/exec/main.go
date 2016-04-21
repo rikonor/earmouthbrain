@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/rikonor/people/person/body"
+	"github.com/rikonor/people/person/ear"
+	"github.com/rikonor/people/person/mouth"
 )
 
 func Example1() {
@@ -39,10 +41,28 @@ func Example5() {
 	fmt.Scanln(&x)
 }
 
+func ExampleComplex() {
+	eIn := ear.NewFileEar("./input")
+
+	m1 := mouth.NewHTTPMouth("localhost:8080", "localhost:8081")
+	eIn.RegisterMessageHandler(m1.SayAsync)
+
+	e1 := ear.NewHTTPEar("8080")
+	mOut1 := mouth.NewFileMouth("./output1")
+	e1.RegisterMessageHandler(mOut1.SayAsync)
+
+	e2 := ear.NewHTTPEar("8081")
+	mOut2 := mouth.NewFileMouth("./output2")
+	e2.RegisterMessageHandler(mOut2.SayAsync)
+
+	fmt.Scanln()
+}
+
 func main() {
 	// Example1()
 	// Example2()
 	// Example3()
 	// Example4()
-	Example5()
+	// Example5()
+	ExampleComplex()
 }

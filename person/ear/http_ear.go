@@ -39,6 +39,7 @@ func getHTTPHandler(msgHandler dto.MessageHandler) func(http.ResponseWriter, *ht
 }
 
 func (he *HTTPEar) Listen() {
-	http.HandleFunc("/", getHTTPHandler(he.relayMessage))
-	http.ListenAndServe(":"+he.Port, nil)
+	sMux := http.NewServeMux()
+	sMux.HandleFunc("/", getHTTPHandler(he.relayMessage))
+	http.ListenAndServe(":"+he.Port, sMux)
 }
