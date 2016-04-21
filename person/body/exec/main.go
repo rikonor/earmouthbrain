@@ -32,9 +32,17 @@ func Example4() {
 	fmt.Scanln(&x)
 }
 
+func Example5() {
+	body.NewBrainlessFileToHTTPBody("./input", "localhost:8080")
+
+	var x string
+	fmt.Scanln(&x)
+}
+
 func main() {
 	// Example1()
 	// Example2()
 	// Example3()
-	Example4()
+	// Example4()
+	Example5()
 }
