@@ -1,4 +1,4 @@
-package dto
+package earmouthbrain
 
 type Message string
 type MessageHandler func(Message)
@@ -14,3 +14,5 @@ func ByteSliceToMessage(bs []byte) Message {
 func StringToMessage(s string) Message {
 	return Message(s)
 }
+
+const DefaultInputBufferCapacity = 50
